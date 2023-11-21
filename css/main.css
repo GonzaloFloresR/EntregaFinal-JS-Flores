@@ -1,0 +1,136 @@
+/* font-family: "all-round-gothic", sans-serif;
+font-weight: 200;
+font-style: normal;
+
+font-family: "all-round-gothic", sans-serif;
+font-weight: 400;
+font-style: normal;
+
+font-family: "all-round-gothic", sans-serif;
+font-weight: 500;
+font-style: normal;
+
+font-family: "all-round-gothic", sans-serif;
+font-weight: 600;
+font-style: normal;
+
+font-family: "all-round-gothic", sans-serif;
+font-weight: 700;
+font-style: normal; */
+
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+	font-family: "all-round-gothic", sans-serif;
+	font-weight: 400;
+	font-style: normal;
+}
+
+body {
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+	font-size: 1.5rem;
+	color: black;
+}
+
+header {
+	width: 100%;
+	height: 62px;
+	padding: 0 20px;
+	background-color: white;
+	display: flex;
+	justify-content: space-between;
+}
+
+#header_logo img {
+	width: 166px;
+	height: auto;
+	margin: 8px auto;
+}
+
+header nav ul {
+	margin: 16px 0px;
+	display: flex;
+	list-style: none;
+	text-transform: uppercase;
+}
+
+header nav ul li {
+	padding: 0px 15px;
+	line-height: 30px;
+}
+
+header nav ul li:hover {
+	font-weight: 500;
+	background: #cfe2f8;
+}
+
+#bread_crumbs {
+	width:100%;
+	height:30px;
+	padding-left: 20px;
+	background-color: black;
+	color: white;
+	line-height:30px;
+	font-weight: 400;
+}
+#Productos {
+	width: 100%;
+	height: auto;
+	background: rgb(131,58,180);
+	background: -moz-linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 38%, rgba(38,73,208,1) 70%, rgba(244,69,252,1) 100%);
+	background: -webkit-linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 38%, rgba(38,73,208,1) 70%, rgba(244,69,252,1) 100%);
+	background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 38%, rgba(38,73,208,1) 70%, rgba(244,69,252,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833ab4",endColorstr="#f445fc",GradientType=1);
+	border-bottom: solid black 30px ;
+
+}
+
+section h1 {
+	text-align: center;
+	margin: 25px 0px;
+	color: white;
+	font-weight:500;
+	font-size: 3rem;
+}
+
+#productos_banner {
+	display: flex;
+	justify-content: space-around;
+	padding: 30px;
+}
+
+.card img {
+	width: 396px;
+	height: auto;
+}
+
+.card .info {
+	width: 396px;
+	height: auto;
+	background-color: rgba(00, 00, 00, 0.75);
+	color: white;
+	font-size: 1.6rem;
+	line-height: 2rem;
+	text-align: center;
+	padding: 15px 0px;
+}
+footer {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
+	font-size: 2rem;
+}
+
+#footer_logo img {
+	width: 150px;
+	height: auto;
+	margin: 5px auto 0px;
+}
