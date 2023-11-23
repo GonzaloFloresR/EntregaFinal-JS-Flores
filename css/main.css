@@ -90,7 +90,7 @@ header nav ul li:hover {
 
 #login {
 	padding-left: 25px;
-	background: url(/img/icons/account_circle.png) left no-repeat ;
+	background: url(img/icons/account_circle.png) left no-repeat ;
 	background-size: 22px 22px;
 }
 
