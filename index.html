@@ -6,18 +6,26 @@
         <title>I Was in Chile Souveniers - Contáctenos</title>
         <meta name="description" content="Formulario de contacto - Tu contacto es el primer paso para grandes posibilidades">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="apple-touch-icon" href="img/icons/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="img/icons/favicon.ico">
 		<link rel="stylesheet" href="https://use.typekit.net/dbb2pgj.css"> <!-- Tipografia desde Adobe -->
         <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
         <div id="container">
 			<header>
-				<div id="header_logo">
-					<img src="img/IwasIn.png" alt="Logo de I Was in Chile">
+				<div id="preHeader">
+					<!--PreHeader donde agrego el login y el buscador-->
+					<input type="search" id="Buscador" placeholder="Buscar producto">
+					<div id="login">
+						
+					</div>
 				</div>
 				<nav>
-					<img class="menu_icon" src="img/icons/menu_FILL0_wght400_GRAD0_opsz24.png" alt="Icono de Menú">
+					<div id="header_logo">
+						<img src="img/IwasIn.png" alt="Logo de I Was in Chile">
+					</div>
+					<img id="menu_icon" src="img/icons/menu_24.png" alt="Icono de Menú">
 					<ul>
 						<li>Inicio</li>
 						<li>Productos</li>
@@ -28,12 +36,34 @@
 				</nav>
 			</header>
 			<main>
-				<div id="bread_crumbs">Inicio <div id="login"></div></div>
+				<div id="bread_crumbs">Inicio 
+					
+					
+					<!-- Botón para abrir el modal -->
+					<a href="#" id="abrirModal"><div id="header_total_productos"></div>Carrito</a>
+
+					<!-- El modal -->
+<div id="modal" class="modal">
+    <div class="modal__contenido">
+        <span class="modal__cerrar">&times;</span>
+        <h2>Carrito de Compra</h2>
+        <ul id="items-carrito">
+            <!-- Aquí se agregarán los elementos del carrito -->
+            
+            <!-- Otros elementos del carrito... -->
+        </ul>
+		<p>Total de Productos :<span id="total-productos">Ningún</span>Ningún</p>
+        <p>Total: <span id="total-carrito">$0.00</span><a href="#" id="borrar_productos">Borrar Productos</a></p>
+        <button id="Pagar">Pagar</button>
+    </div>
+</div>
+
+					
+				</div>
 				<section id="Productos">
 					<div id="productos_banner">
-						
-						
-						</div>
+					<!--Aquí se Agregan los Procutos con javascript-->
+					
 					</div>
 				</section>
 			</main>
@@ -42,7 +72,8 @@
 				<div id="derechos">Marca Registra USA - Chile 2019 - 2027</div>
 			</footer>
 		</div>
-        <script src="js/main.js"></script>
+		
+        <script type="module" src="js/main.js"></script>
     </body>
 </html>
 
