@@ -172,7 +172,7 @@ function verificarCarritoLocalStorage () {
 
 let boton_vaciar_carrito = document.getElementById("borrar_productos");
 boton_vaciar_carrito.addEventListener("click",(e) => {
-    e.preventDefault;
+    e.preventDefault();
     carrito = [];
     localStorage.removeItem('carrito');
     agregarCantidadProductos();
