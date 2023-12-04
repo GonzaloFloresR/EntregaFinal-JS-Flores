@@ -173,10 +173,14 @@ header nav ul li:hover {
 	color:rgb(94, 94, 94);
 }
 
+#modal ul {
+	margin: 10px 0px;
+}
+
 #modal ul li {
 	list-style: none;
 	border-bottom:1px solid rgb(182, 182, 182);
-	height: 30px;
+	line-height: 40px;
 	width: 100%;
 	margin:0px;
 }
@@ -195,15 +199,24 @@ text-decoration: none;
 cursor: pointer;
 }
 
+.modal__totales {
+	width: 100%;
+	display: flex;
+	font-weight: 500;
+	justify-content: space-between;
+}
+
 #Pagar {
 	width: 200px;
 	height: 35px;
-	background-color:#3483fa;
 	border: none;
-	border-radius: 5px;
 	color: white;
+	margin-top: 10px;;
 	font-size: 1.5rem;
-	transition: background-color 2s;
+	background-color:#3483fa;
+	transition: background-color 1s;
+	border-radius: 5px;
+	cursor: pointer;
 }
 #Pagar:hover {
 	background-color: #2968c8;
@@ -260,6 +273,25 @@ section h1 {
 	text-align: center;
 	padding: 15px 0px;
 }
+
+.card .boton-comprar {
+		width: 150px;
+		height: 25px;
+		margin-top: 10px;
+		border: none;
+		color: white;
+		font-size: 1.5rem;
+		background-color:#3483fa;
+		transition: background-color 1s;
+		border-radius: 5px;
+		cursor: pointer;
+}
+.card .boton-comprar:hover {
+	background-color: #2968c8;
+}
+
+
+
 footer {
 	display: flex;
 	justify-content: center;

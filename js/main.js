@@ -19,7 +19,7 @@ function productosEnPantalla(array) {
 					<p>Color: ${element.color}</p>
 					<p>Diseño: ${element.diseno}</p>
 					<p>Precio $${element.precio}</p>
-					<button class="boton-comprar" data-id="${element.id}">COMPRAR</button>
+					<button class="boton-comprar" data-id="${element.id}">Agregar al Carrito</button>
 				</div>
 			</div>`;
     });
