@@ -209,9 +209,19 @@ header nav ul li:hover {
 	align-items: center;
 }
 
+#modal ul li:hover {
+	background-color: lightgoldenrodyellow;
+}
+
 #modal ul li img {
 	width:50px;
 	height: auto;
+}
+
+.diseno  {
+	display:block;
+	width: 35%;
+	font-weight: 500;
 }
 
 .modal__cerrar {

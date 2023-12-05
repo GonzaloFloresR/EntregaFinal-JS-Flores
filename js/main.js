@@ -220,7 +220,7 @@ function cargarModal () {
             decimalSeparator: ",",
         });
         const nuevoItem = document.createElement('li');
-        nuevoItem.innerHTML = `<img src="${producto.imagen}" alt="${producto.diseno}"><span>${producto.diseno}</span><span>${precio}</span><span>Cantidad: ${producto.cantidad}</span> `;
+        nuevoItem.innerHTML = `<img src="${producto.imagen}" alt="${producto.diseno}"><span class="diseno">${producto.diseno}</span><span>${precio}</span><span>Cantidad: ${producto.cantidad}</span> `;
         itemsCarrito.appendChild(nuevoItem); 
         agregarCantidadProductos();
     });
