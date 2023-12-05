@@ -99,7 +99,7 @@ function login() {
 
     if (existingCookie) {
         const nombreUsuario = existingCookie.replace("%20", " ");
-        const contenidoLogin = `<p>${nombreUsuario}</p> | <a href="#" id="cerrarSesion">Cerrar Sesión</a>`;
+        const contenidoLogin = `<p>${nombreUsuario}  |</p><a href="#" id="cerrarSesion">Cerrar Sesión</a>`;
         miDiv.innerHTML = contenidoLogin;
 
         const parrafoCerrarSesion = document.getElementById("cerrarSesion");
@@ -210,8 +210,17 @@ function cargarModal () {
     itemsCarrito.innerHTML = ''; 
 
     carrito.forEach(producto => {
+        const precio = producto.precio.toLocaleString("es-CL", {
+            style: "currency",
+            currency: "CLP",
+            minimumFractionDigits: 0,
+            // Separador de miles
+            thousandsSeparator: ".",
+            // Separador decimal
+            decimalSeparator: ",",
+        });
         const nuevoItem = document.createElement('li');
-        nuevoItem.textContent = `${producto.diseno} - $${producto.precio.toFixed(2)} - Cantidad: ${producto.cantidad}`;
+        nuevoItem.innerHTML = `<img src="${producto.imagen}" alt="${producto.diseno}"><span>${producto.diseno}</span><span>${precio}</span><span>Cantidad: ${producto.cantidad}</span> `;
         itemsCarrito.appendChild(nuevoItem); 
         agregarCantidadProductos();
     });
