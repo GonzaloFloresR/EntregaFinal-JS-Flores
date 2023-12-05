@@ -65,6 +65,21 @@ header {
 	font-size: 14px; 
 }
 
+#preHeader input[type="submit"] {
+	width: 106px;
+	height: 23px;
+	border: none;
+	color: white;
+	font-size: 1.3rem;
+	background-color:#d21414;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 1s;
+}
+#preHeader input[type="submit"]:hover {
+	background-color:#930101;
+}
+
 #preHeader input[type="text"]:focus , #Buscador:focus {
 	outline: none;
 	border-color: dodgerblue;
