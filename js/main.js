@@ -23,23 +23,23 @@ function productosEnPantalla(array) {
 				</div>
 			</div>`;
     });
-    const cardsHTML = cards.join(''); // Une los strings en un solo string
+    // Une los strings en un solo string
+    const cardsHTML = cards.join(''); 
     agregarHtml('productos_banner', cardsHTML);
 }
 
 //Función para mezclar las propiedades del Array
 function ArrayMix(array) {
-    const Array_Mix = array; // Crear una copia del array original
+    const Array_Mix = array; 
     for (let i = Array_Mix.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1)); // Obtener un índice aleatorio
-        [Array_Mix[i], Array_Mix[j]] = [Array_Mix[j], Array_Mix[i]]; // Intercambiar elementos
+        const j = Math.floor(Math.random() * (i + 1)); 
+        [Array_Mix[i], Array_Mix[j]] = [Array_Mix[j], Array_Mix[i]]; 
     }
-
     return Array_Mix;
 }
 
-//-------------------------------Funcion que toma la busqueda desde un input y va haciendo una busqueda incremental
-// Variable para almacenar los productos filtrados
+//Funcion que toma la busqueda desde un input y va haciendo una busqueda incremental
+
 let productosFiltrados = []; 
 
 function inicializarFiltro() {
@@ -54,18 +54,16 @@ function inicializarFiltro() {
             productosFiltrados = [];
             return;
         }
-
         // Filtrar incrementalmente solo los nuevos productos que coincidan con el filtro previo
         const nuevosProductosFiltrados = productosFiltrados.length > 0
             ? productosFiltrados.filter(producto => producto.diseno.toLowerCase().includes(textoDeBusqueda))
             : productos.filter(producto => producto.diseno.toLowerCase().includes(textoDeBusqueda));
-
         productosEnPantalla(nuevosProductosFiltrados);
-        productosFiltrados = nuevosProductosFiltrados; // Actualizar el estado del filtro
+        productosFiltrados = nuevosProductosFiltrados; 
     });
 }
 
-//-------------------------------------------------Funciones de sesión de usuario
+//----------------------------- Funciones de sesión de usuario
 function getCookieValue(name) {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -130,32 +128,28 @@ function login() {
     }
 }
 
-//-----------------------------------------------Funciones del Carrito
+//----------------------------------------------- Funciones del Carrito
  // Obtener referencias a elementos del DOM
 const BotonAbrirModal = document.getElementById('abrirModal');
 const divModal = document.getElementById('modal');
 const closeBtn = document.querySelector('.modal__cerrar');
 
-// Función para abrir el modal
 function abrirModal(e) {
     e.preventDefault();
     divModal.style.display = 'block';
 }
 
-// Función para cerrar el modal
-function closeCartModal(e) {
-    e.preventDefault();
+function cerrarModal() {
     divModal.style.display = 'none';
 }
 
-// Event listeners para abrir y cerrar el modal
 BotonAbrirModal.addEventListener('click', abrirModal);
-closeBtn.addEventListener('click', closeCartModal);
+closeBtn.addEventListener('click', cerrarModal);
 
 // Event listener para cerrar el modal haciendo click fuera de él
 window.addEventListener('click', (event) => {
     if (event.target === divModal) {
-        closeCartModal();
+        cerrarModal();
     }
 });
 
@@ -179,7 +173,7 @@ boton_vaciar_carrito.addEventListener("click",(e) => {
     cargarModal(); });
 
 function cantidadProductos(){
-    return carrito.length;
+    return carrito.reduce((total, producto) => total + producto.cantidad,0);
 }
 
 function agregarCantidadProductos(){
@@ -189,7 +183,6 @@ function agregarCantidadProductos(){
     iconCarrito.innerHTML = cantidadProductos();
     modal__totaProductos.innerHTML = "";
     modal__totaProductos.innerHTML = cantidadProductos();
-
 }
 
 // Función para guardar el carrito en el LocalStorage
@@ -204,7 +197,7 @@ function calcularTotalCarrito() {
 }
 
 //Función que limpia el HTML del Modal y lo carga con productos del Carrito actual
-function cargarModal () {
+function cargarModal() {
     const itemsCarrito = document.getElementById('items-carrito');
     // Limpiar el contenido antes de cargar los productos
     itemsCarrito.innerHTML = ''; 
@@ -220,23 +213,80 @@ function cargarModal () {
             decimalSeparator: ",",
         });
         const nuevoItem = document.createElement('li');
-        nuevoItem.innerHTML = `<img src="${producto.imagen}" alt="${producto.diseno}"><span class="diseno">${producto.diseno}</span><span>${precio}</span><span>Cantidad: ${producto.cantidad}</span> `;
+        nuevoItem.innerHTML = `<img src="${producto.imagen}" alt="${producto.diseno}">
+                                <span class="diseno">${producto.diseno}</span><span>c/u ${precio}</span>
+                                <span><div class="cantidadProductos"><button class="eliminarUnaUnidad" aria-label="eliminar una unidad" data-id="${producto.id}">-</button>
+                                <input class="mostrarCantidad" name="mostrarCantidad" aria-label="${producto.cantidad} ${producto.cantidad > 1? "Productos": "Producto"}" value="${producto.cantidad}" data-id="${producto.id}" disable>
+                                <button class="agregarUnaUnidad" aria-label="agregar una unidad" data-id="${producto.id}">+</button></div></span>
+                                <span><img class="basurero" src="img/icons/delete_24.png" alt="Eliminar Producto" data-id="${producto.id}"></span> `;
         itemsCarrito.appendChild(nuevoItem); 
         agregarCantidadProductos();
     });
 
     total = calcularTotalCarrito();
+    total = total.toLocaleString("es-CL", {
+        style: "currency",
+        currency: "CLP",
+        minimumFractionDigits: 0,
+        // Separador de miles
+        thousandsSeparator: ".",
+        // Separador decimal
+        decimalSeparator: ",",
+    });
     const totalCarrito = document.getElementById('total-carrito');
-    totalCarrito.textContent = `$${total.toFixed(2)}`;
+    totalCarrito.textContent = total;
+    eventosBotonesProductosModal();
 }
 
-// Función para agregar un producto al carrito
+function eventosBotonesProductosModal() {
+    const botonAdicionarProducto = document.getElementsByClassName("agregarUnaUnidad");
+    const botonSustraerProducto = document.getElementsByClassName("eliminarUnaUnidad");
+    const basureros = document.getElementsByClassName("basurero");
+    
+    [...botonAdicionarProducto].forEach((boton) => {
+        boton.addEventListener("click", () => {
+            const idProducto = boton.dataset.id;
+            const productoACambiar = carrito.find((producto) => producto.id === parseInt(idProducto));
+            productoACambiar.cantidad += 1;
+            guardarCarritoEnLocalStorage();
+            cargarModal();
+        })
+    });
+    // ###
+    [...botonSustraerProducto].forEach((boton) => {
+
+        boton.addEventListener("click",() => {
+            const idProducto = boton.dataset.id;
+            const productoACambiar = carrito.find((producto) => producto.id === parseInt(idProducto));
+            let cantidad = productoACambiar.cantidad;
+            if(cantidad === 1 ){
+                carrito = carrito.filter((producto) => producto.id !== parseInt(productoACambiar.id));
+                boton.disabled = true;
+            } else {
+                productoACambiar.cantidad -= 1;
+            }
+            guardarCarritoEnLocalStorage();
+            cargarModal();
+        })
+    });
+
+    [...basureros].forEach((tachito) => {
+        tachito.addEventListener("click",() => {
+            const idTachito = tachito.dataset.id;
+            carrito = carrito.filter((producto) => producto.id !== parseInt(idTachito));
+            guardarCarritoEnLocalStorage();
+            cargarModal();
+        })
+    });
+}
+
 function agregarProductoAlCarrito(producto) {
-    carrito.push(producto);
+    let idProducto = producto.id;
+    let productoExistente = carrito.find((seleccionados) => seleccionados.id === idProducto);
+    productoExistente ? productoExistente.cantidad += 1 : carrito.push(producto);
     guardarCarritoEnLocalStorage();
 }
 
-// Función para agregar evento a los botones de compra
 function botonProductoAgregar() {
     const botonesProducto = document.getElementsByClassName("boton-comprar");
     [...botonesProducto].forEach((boton) => {
@@ -244,7 +294,6 @@ function botonProductoAgregar() {
             const idProducto = boton.dataset.id;
             const productoSeleccionado = productos.find((producto) => producto.id === parseInt(idProducto));
             agregarProductoAlCarrito(productoSeleccionado);
-            // Actualizar visualmente el carrito
             cargarModal(); 
         });
     });
@@ -262,3 +311,5 @@ productosEnPantalla(ArrayMix(productos));
 botonProductoAgregar();
 
 inicializarFiltro();
+
+eventosBotonesProductosModal();
