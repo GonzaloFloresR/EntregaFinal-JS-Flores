@@ -163,14 +163,44 @@ function verificarCarritoLocalStorage () {
     return carrito;
 }
 
+let carrito = verificarCarritoLocalStorage();
+let total = 0;
+
 
 let boton_vaciar_carrito = document.getElementById("borrar_productos");
 boton_vaciar_carrito.addEventListener("click",(e) => {
     e.preventDefault();
-    carrito = [];
-    localStorage.removeItem('carrito');
-    agregarCantidadProductos();
-    cargarModal(); });
+    if(carrito.length < 1){ 
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "El Carrito ya se encuentra vacio",
+    });
+    } else { 
+    //
+    Swal.fire({
+        title: "¿Vaciar Carrito?",
+        text: "Estás a punto de eliminar todos los productos",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Vaciar Carrito"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            carrito = [];
+            localStorage.removeItem('carrito');
+            agregarCantidadProductos();
+            cargarModal();
+            Swal.fire({
+            title: "Carrito vaciado",
+            text: "Eliminaste todos los productos",
+            icon: "success"
+            });
+        }
+    });
+    //
+}});
 
 function cantidadProductos(){
     return carrito.reduce((total, producto) => total + producto.cantidad,0);
@@ -215,7 +245,7 @@ function cargarModal() {
         const nuevoItem = document.createElement('li');
         nuevoItem.innerHTML = `<img src="${producto.imagen}" alt="${producto.diseno}">
                                 <span class="diseno">${producto.diseno}</span><span>c/u ${precio}</span>
-                                <span><div class="cantidadProductos"><button class="eliminarUnaUnidad" aria-label="eliminar una unidad" data-id="${producto.id}">-</button>
+                                <span><div class="cantidadProductos"><button class="eliminarUnaUnidad" aria-label="eliminar una unidad" data-id="${producto.id}"> － </button>
                                 <input class="mostrarCantidad" name="mostrarCantidad" aria-label="${producto.cantidad} ${producto.cantidad > 1? "Productos": "Producto"}" value="${producto.cantidad}" data-id="${producto.id}" disable>
                                 <button class="agregarUnaUnidad" aria-label="agregar una unidad" data-id="${producto.id}">+</button></div></span>
                                 <span><img class="basurero" src="img/icons/delete_24.png" alt="Eliminar Producto" data-id="${producto.id}"></span> `;
@@ -254,17 +284,21 @@ function eventosBotonesProductosModal() {
     });
     // ###
     [...botonSustraerProducto].forEach((boton) => {
-
+        //Desabilitar botón cuando hay solo 1 producto
+        const idProducto = boton.dataset.id;
+        const productoACambiar = carrito.find((producto) => producto.id === parseInt(idProducto));
+        let cantidad = productoACambiar.cantidad;
+            if(cantidad === 1 ){
+                boton.disabled = true;
+            }
+        //
         boton.addEventListener("click",() => {
             const idProducto = boton.dataset.id;
             const productoACambiar = carrito.find((producto) => producto.id === parseInt(idProducto));
             let cantidad = productoACambiar.cantidad;
-            if(cantidad === 1 ){
-                carrito = carrito.filter((producto) => producto.id !== parseInt(productoACambiar.id));
-                boton.disabled = true;
-            } else {
-                productoACambiar.cantidad -= 1;
-            }
+            
+            productoACambiar.cantidad -= 1;
+            
             guardarCarritoEnLocalStorage();
             cargarModal();
         })
@@ -272,10 +306,29 @@ function eventosBotonesProductosModal() {
 
     [...basureros].forEach((tachito) => {
         tachito.addEventListener("click",() => {
-            const idTachito = tachito.dataset.id;
-            carrito = carrito.filter((producto) => producto.id !== parseInt(idTachito));
-            guardarCarritoEnLocalStorage();
-            cargarModal();
+            //
+            Swal.fire({
+                title: "¿Desea Eliminar el prodcuto?",
+                text: "¿Te quedaras sin tu polera?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Si, Eliminar Producto"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const idTachito = tachito.dataset.id;
+                    carrito = carrito.filter((producto) => producto.id !== parseInt(idTachito));
+                    guardarCarritoEnLocalStorage();
+                    cargarModal();
+                    Swal.fire({
+                        title: "Eliminado",
+                        text: "Producto Eliminado del carrito",
+                        icon: "success"
+                    });
+                }
+            });
+            //
         })
     });
 }
@@ -291,16 +344,24 @@ function botonProductoAgregar() {
     const botonesProducto = document.getElementsByClassName("boton-comprar");
     [...botonesProducto].forEach((boton) => {
         boton.addEventListener("click", () => {
+            //
+
+            //
             const idProducto = boton.dataset.id;
             const productoSeleccionado = productos.find((producto) => producto.id === parseInt(idProducto));
             agregarProductoAlCarrito(productoSeleccionado);
             cargarModal(); 
+
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "El Producto se Agregó Al Carrito",
+                showConfirmButton: false,
+                timer: 1500
+            });
         });
     });
 }
-
-let carrito = verificarCarritoLocalStorage();
-let total = 0;
 
 cargarModal();
 

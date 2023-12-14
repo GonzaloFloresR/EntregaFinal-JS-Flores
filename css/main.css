@@ -246,6 +246,12 @@ header nav ul li:hover {
 	cursor:pointer;
 }
 
+#modal ul li span div.cantidadProductos .eliminarUnaUnidad[disabled] {
+	color: lightgray;
+	pointer-events: none;
+}
+
+
 #modal ul li span img {
 	margin-top: 13px;
 	cursor:pointer;
