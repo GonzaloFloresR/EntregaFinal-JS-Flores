@@ -1,5 +1,3 @@
-import productos from './productos.js';
-
 
 //-----------------------------función con dos argumentos para agregar contenido HTML al documento
 function agregarHtml(divId, contenido) {
@@ -42,7 +40,7 @@ function ArrayMix(array) {
 
 let productosFiltrados = []; 
 
-function inicializarFiltro() {
+function inicializarFiltro(productos) {
     const inputBusqueda = document.getElementById("Buscador");
 
     inputBusqueda.addEventListener("input", function () {
@@ -92,41 +90,49 @@ function deleteCookie(name) {
 function login() {
     const userName = 'userName';
     const miDiv = document.getElementById("login");
-
     const existingCookie = getCookieValue(userName);
-
-    if (existingCookie) {
-        const nombreUsuario = existingCookie.replace("%20", " ");
-        const contenidoLogin = `<p>${nombreUsuario}  |</p><a href="#" id="cerrarSesion">Cerrar Sesión</a>`;
-        miDiv.innerHTML = contenidoLogin;
-
-        const parrafoCerrarSesion = document.getElementById("cerrarSesion");
-        parrafoCerrarSesion.addEventListener('click', () => {
-            deleteCookie(userName);
-            miDiv.innerHTML = "";
-            const loginForm = `<form>
-                                    <input type="text" name="nombre" placeholder="Iniciar Sesión">
-                                    <input type="submit" value="Iniciar Sesión">
-                                </form>`;
-            miDiv.innerHTML = loginForm;
-        });
-    } else {
-        miDiv.innerHTML = "";
-        const loginForm = `<form>
-                                <input type="text" name="nombre" placeholder="Iniciar Sesión">
-                                <input type="submit" value="Iniciar Sesión">
-                            </form>`;
-        miDiv.innerHTML = loginForm;
-
+    
+    const renderLoginForm = () => {
+        miDiv.innerHTML = `
+            <form>
+                <input type="text" name="nombre" placeholder="Ingresar su Nombre">
+                <input type="submit" value="Iniciar Sesión">
+            </form>
+        `;
         const form = document.querySelector('form');
         form.addEventListener('submit', (event) => {
             event.preventDefault();
             const nombre = event.target.elements.nombre.value;
             setCookie(userName, nombre, 7); // 7 days expiration, you can modify this value
-            login(); // Update the UI after setting the cookie
+            updateUI();
         });
-    }
+    };
+
+    const renderLoggedInUser = (username) => {
+        miDiv.innerHTML = `
+            <p>${username}  |</p>
+            <a href="#" id="cerrarSesion">Cerrar Sesión</a>
+        `;
+        const parrafoCerrarSesion = document.getElementById("cerrarSesion");
+        parrafoCerrarSesion.addEventListener('click', () => {
+            deleteCookie(userName);
+            updateUI();
+        });
+    };
+
+    const updateUI = () => {
+        const existingCookie = getCookieValue(userName);
+        if (existingCookie) {
+            const nombreUsuario = existingCookie.replace("%20", " ");
+            renderLoggedInUser(nombreUsuario);
+        } else {
+            renderLoginForm();
+        }
+    };
+
+    updateUI(); // Initial UI update
 }
+
 
 //----------------------------------------------- Funciones del Carrito
  // Obtener referencias a elementos del DOM
@@ -165,7 +171,6 @@ function verificarCarritoLocalStorage () {
 
 let carrito = verificarCarritoLocalStorage();
 let total = 0;
-
 
 let boton_vaciar_carrito = document.getElementById("borrar_productos");
 boton_vaciar_carrito.addEventListener("click",(e) => {
@@ -215,13 +220,11 @@ function agregarCantidadProductos(){
     modal__totaProductos.innerHTML = cantidadProductos();
 }
 
-// Función para guardar el carrito en el LocalStorage
 function guardarCarritoEnLocalStorage() {
     localStorage.getItem('carrito') && localStorage.removeItem('carrito');
     localStorage.setItem('carrito', JSON.stringify(carrito));
 }
 
-// Función para calcular el total del carrito
 function calcularTotalCarrito() {
     return carrito.reduce((total, producto) => total + producto.precio * producto.cantidad, 0);
 }
@@ -229,7 +232,6 @@ function calcularTotalCarrito() {
 //Función que limpia el HTML del Modal y lo carga con productos del Carrito actual
 function cargarModal() {
     const itemsCarrito = document.getElementById('items-carrito');
-    // Limpiar el contenido antes de cargar los productos
     itemsCarrito.innerHTML = ''; 
 
     carrito.forEach(producto => {
@@ -272,9 +274,20 @@ function eventosBotonesProductosModal() {
     const botonAdicionarProducto = document.getElementsByClassName("agregarUnaUnidad");
     const botonSustraerProducto = document.getElementsByClassName("eliminarUnaUnidad");
     const basureros = document.getElementsByClassName("basurero");
-    
+
+    function removeListeners(elements) {
+        [...elements].forEach((element) => {
+            const clonedElement = element.cloneNode(true);
+            element.parentNode.replaceChild(clonedElement, element);
+        });
+    }
+
+    removeListeners(botonAdicionarProducto);
+    removeListeners(botonSustraerProducto);
+    removeListeners(basureros);
+
     [...botonAdicionarProducto].forEach((boton) => {
-        boton.addEventListener("click", () => {
+            boton.addEventListener("click", () => {
             const idProducto = boton.dataset.id;
             const productoACambiar = carrito.find((producto) => producto.id === parseInt(idProducto));
             productoACambiar.cantidad += 1;
@@ -340,13 +353,10 @@ function agregarProductoAlCarrito(producto) {
     guardarCarritoEnLocalStorage();
 }
 
-function botonProductoAgregar() {
+function botonProductoAgregar(productos) {
     const botonesProducto = document.getElementsByClassName("boton-comprar");
     [...botonesProducto].forEach((boton) => {
         boton.addEventListener("click", () => {
-            //
-
-            //
             const idProducto = boton.dataset.id;
             const productoSeleccionado = productos.find((producto) => producto.id === parseInt(idProducto));
             agregarProductoAlCarrito(productoSeleccionado);
@@ -363,14 +373,26 @@ function botonProductoAgregar() {
     });
 }
 
-cargarModal();
 
-login();
 
-productosEnPantalla(ArrayMix(productos));
+fetch('./json/productos.json')
+    .then((response) => response.json())
+    .then((data) => {
+        let productos = data;
 
-botonProductoAgregar();
+        cargarModal();
 
-inicializarFiltro();
+        login();
 
-eventosBotonesProductosModal();
+        productosEnPantalla(ArrayMix(productos));
+
+        botonProductoAgregar(productos);
+
+        inicializarFiltro(productos);
+
+        eventosBotonesProductosModal();
+    
+    })
+    .catch(error => {
+        console.error('Error al cargar el archivo JSON:', error);
+    });
