@@ -1,3 +1,16 @@
+async function indicadoresDiario() {
+    try {
+        const response = await fetch('https://mindicador.cl/api/dolar');
+        if (!response.ok) {
+        throw new Error('La respuesta de la red no fue correcta');
+    }
+
+    const indicadorDiario = await response.json();
+    document.getElementById("Dolar").innerHTML = `El valor actual del Dólar es $ ${indicadorDiario.serie[0].valor} pesos Chilenos`;
+    } catch (error) {
+        console.error('Solicitud fallida', error);
+    }
+}
 
 //-----------------------------función con dos argumentos para agregar contenido HTML al documento
 function agregarHtml(divId, contenido) {
@@ -133,9 +146,7 @@ function login() {
     updateUI(); // Initial UI update
 }
 
-
 //----------------------------------------------- Funciones del Carrito
- // Obtener referencias a elementos del DOM
 const BotonAbrirModal = document.getElementById('abrirModal');
 const divModal = document.getElementById('modal');
 const closeBtn = document.querySelector('.modal__cerrar');
@@ -152,14 +163,12 @@ function cerrarModal() {
 BotonAbrirModal.addEventListener('click', abrirModal);
 closeBtn.addEventListener('click', cerrarModal);
 
-// Event listener para cerrar el modal haciendo click fuera de él
 window.addEventListener('click', (event) => {
     if (event.target === divModal) {
         cerrarModal();
     }
 });
 
-/////////////////////////////////////////////////////////
 // Función para obtener el carrito del LocalStorage
 function verificarCarritoLocalStorage () {
     let carrito = [];
@@ -295,16 +304,15 @@ function eventosBotonesProductosModal() {
             cargarModal();
         })
     });
-    // ###
     [...botonSustraerProducto].forEach((boton) => {
-        //Desabilitar botón cuando hay solo 1 producto
+
         const idProducto = boton.dataset.id;
         const productoACambiar = carrito.find((producto) => producto.id === parseInt(idProducto));
         let cantidad = productoACambiar.cantidad;
             if(cantidad === 1 ){
                 boton.disabled = true;
             }
-        //
+        
         boton.addEventListener("click",() => {
             const idProducto = boton.dataset.id;
             const productoACambiar = carrito.find((producto) => producto.id === parseInt(idProducto));
@@ -341,7 +349,6 @@ function eventosBotonesProductosModal() {
                     });
                 }
             });
-            //
         })
     });
 }
@@ -396,3 +403,5 @@ fetch('./json/productos.json')
     .catch(error => {
         console.error('Error al cargar el archivo JSON:', error);
     });
+
+    indicadoresDiario();
