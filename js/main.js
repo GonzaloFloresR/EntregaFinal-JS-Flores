@@ -380,6 +380,25 @@ function botonProductoAgregar(productos) {
     });
 }
 
+let btnPagar = document.getElementById("Pagar");
+btnPagar.addEventListener("click",()=> {
+    if(carrito.length < 1){Swal.fire({
+        icon: "error",
+        title: "No Hay Productos en el Carro",
+        text: "¡Agregue un producto al carrito para comprar!"
+    });} else {
+        Swal.fire({
+        icon: "success",
+        title: "Transacción Exitosa",
+        text: "¡Gracias por su Compra!"
+    });
+    carrito = [];
+    localStorage.removeItem('carrito');
+    agregarCantidadProductos();
+    cargarModal();}
+    
+});
+
 
 
 fetch('./json/productos.json')
